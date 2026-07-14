@@ -1,7 +1,11 @@
 import axios from 'axios'
 
+// const client = axios.create({
+//   baseURL: '/api/v1',
+//   headers: { 'Content-Type': 'application/json' },
+// })
 const client = axios.create({
-  baseURL: '/api/v1',
+  baseURL: `${import.meta.env.VITE_API_BASE_URL}/api/v1`,
   headers: { 'Content-Type': 'application/json' },
 })
 
@@ -46,7 +50,11 @@ client.interceptors.response.use(
       const refreshToken = localStorage.getItem('tm_refresh_token')
 
       try {
-        const { data } = await axios.post('/api/v1/auth/refresh', { refreshToken })
+        // const { data } = await axios.post('/api/v1/auth/refresh', { refreshToken })
+        const { data } = await axios.post(
+          `${import.meta.env.VITE_API_BASE_URL}/api/v1/auth/refresh`,
+          { refreshToken }
+        )
         const { accessToken, refreshToken: newRefreshToken } = data.data
 
         localStorage.setItem('tm_access_token', accessToken)
