@@ -1,0 +1,11 @@
+target/
+*.class
+.env.example
+.env
+.idea/
+*.iml
+backend/.env.example
+backend/.env
+frontend/.env
+.env
+.env.example
