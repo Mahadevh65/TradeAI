@@ -17,7 +17,7 @@ public class MarketSyncService {
     /**
      * Runs once when Spring Boot starts.
      */
-    @EventListener(ApplicationReadyEvent.class)
+    // @EventListener(ApplicationReadyEvent.class)
     public void initialSync() {
 
         log.info("==========================================");
@@ -41,7 +41,7 @@ public class MarketSyncService {
     /**
      * Refresh every 6 hours.
      */
-    @Scheduled(cron = "0 0 */6 * * *")
+    // @Scheduled(cron = "0 0 */6 * * *")
     public void scheduledSync() {
 
         log.info("Running scheduled stock synchronization...");
