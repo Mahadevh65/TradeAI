@@ -20,7 +20,8 @@ import AdminRoute from './routes/AdminRoute'
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/login" replace />} />
+      {/* <Route path="/" element={<Navigate to="/login" replace />} /> */}
+      <Route path="/" element={<Navigate to="/markets" replace />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -30,14 +31,20 @@ export default function App() {
       <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
       <Route path="/portfolio" element={<ProtectedRoute><Portfolio /></ProtectedRoute>} />
       <Route path="/watchlist" element={<ProtectedRoute><Watchlist /></ProtectedRoute>} />
-      <Route path="/markets" element={<ProtectedRoute><Markets /></ProtectedRoute>} />
+      {/* <Route path="/markets" element={<ProtectedRoute><Markets /></ProtectedRoute>} />
       <Route path="/stocks/:symbol" element={<ProtectedRoute><StockDetail /></ProtectedRoute>} />
       <Route path="/copilot" element={<ProtectedRoute><AiCopilot /></ProtectedRoute>} />
-      <Route path="/news" element={<ProtectedRoute><News /></ProtectedRoute>} />
-      <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
+      <Route path="/news" element={<ProtectedRoute><News /></ProtectedRoute>} /> */}
+      {/* <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} /> */}
+      <Route path="/markets" element={<Markets />} />
+      <Route path="/stocks/:symbol" element={<StockDetail />} />
+      <Route path="/copilot" element={<AiCopilot />} />
+      <Route path="/news" element={<News />} />
+      <Route path="/analytics" element={<Analytics />} />
       <Route path="/admin" element={<AdminRoute><Admin /></AdminRoute>} />
 
-      <Route path="*" element={<Navigate to="/login" replace />} />
+      {/* <Route path="*" element={<Navigate to="/login" replace />} /> */}
+      <Route path="*" element={<Navigate to="/markets" replace />} />
     </Routes>
   )
 }

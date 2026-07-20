@@ -25,7 +25,7 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity  // enables @PreAuthorize("hasRole('ADMIN')") etc. across all modules
+@EnableMethodSecurity // enables @PreAuthorize("hasRole('ADMIN')") etc. across all modules
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -56,21 +56,50 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable())
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-            .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers(
-                    "/api/v1/auth/**",
-                    "/swagger-ui/**",
-                    "/v3/api-docs/**",
-                    "/swagger-ui.html"
-                ).permitAll()
-                .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
-                .anyRequest().authenticated()
-            )
-            .authenticationProvider(authenticationProvider())
-            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                // .authorizeHttpRequests(auth -> auth
+                // .requestMatchers(
+                // "/api/v1/auth/**",
+                // "/swagger-ui/**",
+                // "/v3/api-docs/**",
+                // "/swagger-ui.html"
+                // ).permitAll()
+                // .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
+                // .anyRequest().authenticated()
+                // )
+
+                .authorizeHttpRequests(auth -> auth
+
+                        // Public APIs
+                        .requestMatchers(
+                                "/api/v1/auth/**",
+                                "/api/v1/stocks/**",
+                                "/api/v1/news/**",
+                                "/api/v1/ai/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/v3/api-docs/**")
+                        .permitAll()
+
+                        // Admin
+                        .requestMatchers("/api/v1/admin/**")
+                        .hasRole("ADMIN")
+
+                        // User Features
+                        .requestMatchers(
+                                "/api/v1/watchlists/**",
+                                "/api/v1/portfolio/**",
+                                "/api/v1/orders/**",
+                                "/api/v1/alerts/**")
+                        .authenticated()
+
+                        // Everything else
+                        .anyRequest().permitAll()
+                    )
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

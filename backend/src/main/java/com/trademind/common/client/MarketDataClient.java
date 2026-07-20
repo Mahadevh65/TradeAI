@@ -221,7 +221,7 @@ public class MarketDataClient {
             return Mono.empty();
         }
         WebClient client = webClientBuilder.baseUrl(properties.getTwelveData().getBaseUrl()).build();
-
+        
         return client.get()
                 .uri(uriBuilder -> uriBuilder.path("/quote")
                         .queryParam("symbol", symbol)
@@ -241,33 +241,39 @@ public class MarketDataClient {
                 });
     }
 
-    public Mono<CompanyProfile> getCompanyProfile(String symbol) {
-        if (isBlank(properties.getFinnhub().getApiKey())) {
-            return Mono.empty();
-        }
-        WebClient client = webClientBuilder.baseUrl(properties.getFinnhub().getBaseUrl()).build();
+    // public Mono<CompanyProfile> getCompanyProfile(String symbol) {
+    // if (isBlank(properties.getFinnhub().getApiKey())) {
+    // return Mono.empty();
+    // }
+    // WebClient client =
+    // webClientBuilder.baseUrl(properties.getFinnhub().getBaseUrl()).build();
 
-        return client.get()
-                .uri(uriBuilder -> uriBuilder.path("/stock/profile2")
-                        .queryParam("symbol", symbol)
-                        .queryParam("token", properties.getFinnhub().getApiKey())
-                        .build())
-                .retrieve()
-                .bodyToMono(Map.class)
-                .timeout(Duration.ofSeconds(5))
-                .map(body -> new CompanyProfile(
-                        symbol,
-                        (String) body.get("name"),
-                        (String) body.get("exchange"),
-                        (String) body.get("finnhubIndustry"),
-                        (String) body.get("finnhubIndustry"),
-                        (String) body.get("logo"),
-                        parseDecimal(body.get("marketCapitalization")),
-                        null, null, null, null, null))
-                .onErrorResume(ex -> {
-                    log.warn("Finnhub profile lookup failed for {}: {}", symbol, ex.getMessage());
-                    return Mono.empty();
-                });
+    // return client.get()
+    // .uri(uriBuilder -> uriBuilder.path("/stock/profile2")
+    // .queryParam("symbol", symbol)
+    // .queryParam("token", properties.getFinnhub().getApiKey())
+    // .build())
+    // .retrieve()
+    // .bodyToMono(Map.class)
+    // .timeout(Duration.ofSeconds(5))
+    // .map(body -> new CompanyProfile(
+    // symbol,
+    // (String) body.get("name"),
+    // (String) body.get("exchange"),
+    // (String) body.get("finnhubIndustry"),
+    // (String) body.get("finnhubIndustry"),
+    // (String) body.get("logo"),
+    // parseDecimal(body.get("marketCapitalization")),
+    // null, null, null, null, null))
+    // .onErrorResume(ex -> {
+    // log.warn("Finnhub profile lookup failed for {}: {}", symbol,
+    // ex.getMessage());
+    // return Mono.empty();
+    // });
+    // }
+
+    public Mono<CompanyProfile> getCompanyProfile(String symbol) {
+        return Mono.empty();
     }
 
     private boolean isBlank(String s) {

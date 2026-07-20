@@ -63,19 +63,19 @@ public class StockService {
                 finalStock.setVolume(quote.volume());
         });
 
-        marketDataClient.getCompanyProfile(symbol).blockOptional().ifPresent(profile -> {
-            if (profile.name() != null)
-                finalStock.setCompanyName(profile.name());
-            if (profile.exchange() != null)
-                finalStock.setExchange(profile.exchange());
-            if (profile.sector() != null)
-                finalStock.setSector(profile.sector());
-            if (profile.logoUrl() != null)
-                finalStock.setLogoUrl(profile.logoUrl());
-            if (profile.marketCap() != null)
-                finalStock.setMarketCap(profile.marketCap());
-        });
-
+        // marketDataClient.getCompanyProfile(symbol).blockOptional().ifPresent(profile -> {
+        //     if (profile.name() != null)
+        //         finalStock.setCompanyName(profile.name());
+        //     if (profile.exchange() != null)
+        //         finalStock.setExchange(profile.exchange());
+        //     if (profile.sector() != null)
+        //         finalStock.setSector(profile.sector());
+        //     if (profile.logoUrl() != null)
+        //         finalStock.setLogoUrl(profile.logoUrl());
+        //     if (profile.marketCap() != null)
+        //         finalStock.setMarketCap(profile.marketCap());
+        // });
+        
         return stockRepository.save(finalStock);
     }
 

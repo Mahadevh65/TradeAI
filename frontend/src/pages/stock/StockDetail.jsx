@@ -1,14 +1,62 @@
 import React from 'react'
-import { useParams } from 'react-router-dom'
+// import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { ComposedChart, Bar, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts'
 import DashboardLayout from '../../components/layout/DashboardLayout'
 import Badge from '../../components/dashboard/Badge'
 import { CardSkeleton } from '../../components/dashboard/Skeleton'
 import { stockApi } from '../../api/stock'
+import { useAuth } from '../../context/AuthContext'
 
 export default function StockDetail() {
   const { symbol } = useParams()
+
+  const navigate = useNavigate()
+
+  const { user } = useAuth()
+
+  const requireLogin = () => {
+
+    if (!user) {
+
+      const ok = window.confirm(
+        "Please login to continue.\n\nTrading and Watchlist features require an account."
+      )
+
+      if (ok) {
+        navigate("/login")
+      }
+
+      return false
+    }
+
+    return true
+  }
+
+  const handleBuy = () => {
+
+    if (!requireLogin()) return
+
+    alert("Buy feature coming soon!")
+
+  }
+
+  const handleSell = () => {
+
+    if (!requireLogin()) return
+
+    alert("Sell feature coming soon!")
+
+  }
+
+  const handleWatchlist = () => {
+
+    if (!requireLogin()) return
+
+    alert("Added to Watchlist!")
+
+  }
 
   const { data: stock, isLoading } = useQuery({
     queryKey: ['stock-details', symbol], queryFn: () => stockApi.getDetails(symbol).then((r) => r.data.data),
@@ -59,15 +107,50 @@ export default function StockDetail() {
             </p>
           </div>
 
+          <div className="flex flex-wrap gap-3 mb-6">
+
+            <button
+              onClick={handleBuy}
+              className="px-6 py-3 rounded-xl bg-green-600 hover:bg-green-700 text-white font-semibold transition"
+            >
+              Buy
+            </button>
+
+            <button
+              onClick={handleSell}
+              className="px-6 py-3 rounded-xl bg-red-600 hover:bg-red-700 text-white font-semibold transition"
+            >
+              Sell
+            </button>
+
+            <button
+              onClick={handleWatchlist}
+              className="px-6 py-3 rounded-xl border border-signal-blue text-signal-blue hover:bg-signal-blue/10 transition"
+            >
+              Add to Watchlist
+            </button>
+
+          </div>
+
+
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <Stat label="Market cap" value={fmt(stock?.marketCap)} />
+            {/* <Stat label="Market cap" value={fmt(stock?.marketCap)} />
             <Stat label="P/E ratio" value={stock?.peRatio ?? '—'} />
             <Stat label="EPS" value={stock?.eps ?? '—'} />
             <Stat label="Dividend yield" value={stock?.dividendYield ? `${stock.dividendYield}%` : '—'} />
             <Stat label="52w high" value={fmt(stock?.week52High)} />
             <Stat label="52w low" value={fmt(stock?.week52Low)} />
             <Stat label="Volume" value={stock?.volume?.toLocaleString() ?? '—'} />
-            <Stat label="Currency" value={stock?.currency || 'USD'} />
+            <Stat label="Currency" value={stock?.currency || 'USD'} /> */}
+
+            <Stat label="Exchange" value={stock?.exchange ?? '—'} />
+            <Stat label="Country" value={stock?.country ?? '—'} />
+            <Stat label="Currency" value={stock?.currency ?? '—'} />
+            <Stat label="Type" value={stock?.type ?? '—'} />
+            <Stat label="Volume" value={stock?.volume?.toLocaleString() ?? '—'} />
+            <Stat label="Sector" value={stock?.sector ?? '—'} />
+            <Stat label="Company" value={stock?.companyName ?? '—'} />
+            <Stat label="Symbol" value={stock?.symbol ?? '—'} />
           </div>
         </>
       )}
